@@ -3,6 +3,7 @@ import sys
 
 import pandas as pd
 import numpy as np
+import dill
 
 from src.exception import CustomException
 from src.logger import logging
@@ -13,9 +14,8 @@ def save_object(file_path, obj):
         dir_path = os.path.dirname(file_path)
         os.makedirs(dir_path, exist_ok=True)
 
-        import pickle
         with open(file_path, 'wb') as file_obj:
-            pickle.dump(obj, file_obj)
+            dill.dump(obj, file_obj)
 
     except Exception as e:
         raise CustomException(e, sys)
@@ -50,3 +50,11 @@ def evaluate_models(x_train,y_train,x_test,y_test,models,params):
 
     except Exception as e:
         raise CustomException(e, sys)
+    
+def load_object(file_path):
+        try:
+            with open(file_path, 'rb') as file_obj:
+                return dill.load(file_obj)
+
+        except Exception as e:
+            raise CustomException(e, sys)
